@@ -34,7 +34,7 @@ class _ColorBlendControlsState extends State<ColorBlendControls> {
   ];
 
   void _updateFilter() {
-    final Color colorWithOpacity = blendColor.withOpacity(opacity);
+    final Color colorWithOpacity = blendColor.withValues(alpha: opacity);
     final colorFilter = ColorFilter.mode(
       colorWithOpacity,
       currentBlendMode,
@@ -61,7 +61,7 @@ class _ColorBlendControlsState extends State<ColorBlendControls> {
             itemCount: presetColors.length,
             itemBuilder: (context, index) {
               final color = presetColors[index];
-              final isSelected = color.value == blendColor.value;
+              final isSelected = color == blendColor;
 
               return GestureDetector(
                 onTap: () {
@@ -111,12 +111,6 @@ class _ColorBlendControlsState extends State<ColorBlendControls> {
               ),
             ),
             const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                '#${blendColor.value.toRadixString(16).toUpperCase().padLeft(8, '0')}',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ),
           ],
         ),
       ],
@@ -159,7 +153,8 @@ class _ColorBlendControlsState extends State<ColorBlendControls> {
                       width: isSelected ? 2 : 1,
                     ),
                     borderRadius: BorderRadius.circular(8),
-                    color: isSelected ? Colors.blue.withOpacity(0.1) : null,
+                    color:
+                        isSelected ? Colors.blue.withValues(alpha: 0.1) : null,
                   ),
                   child: Row(
                     children: [

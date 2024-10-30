@@ -7,7 +7,7 @@ class ErodeControls extends StatefulWidget {
   const ErodeControls({super.key, required this.onFilterChanged});
 
   @override
-  _ErodeControlsState createState() => _ErodeControlsState();
+  State<ErodeControls> createState() => _ErodeControlsState();
 }
 
 class _ErodeControlsState extends State<ErodeControls> {

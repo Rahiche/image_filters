@@ -1,9 +1,9 @@
-import 'dart:math';
+// import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-final _random = Random();
+// final _random = Random();
 
 void main() => runApp(const BackdropFilterDemo());
 
@@ -107,7 +107,7 @@ class BlurEffect extends StatelessWidget {
           // tileMode: TileMode.mirror,
         ),
         child: DecoratedBox(
-          decoration: BoxDecoration(color: Colors.black.withOpacity(.65)),
+          decoration: BoxDecoration(color: Colors.black.withValues(alpha: .65)),
           child: child,
         ),
       ),

@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 class DilateControls extends StatefulWidget {
   final Function(ImageFilter) onFilterChanged;
 
-  const DilateControls({Key? key, required this.onFilterChanged})
-      : super(key: key);
+  const DilateControls({super.key, required this.onFilterChanged});
 
   @override
-  _DilateControlsState createState() => _DilateControlsState();
+  State<DilateControls> createState() => _DilateControlsState();
 }
 
 class _DilateControlsState extends State<DilateControls> {

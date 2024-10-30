@@ -92,7 +92,7 @@ class _InteractiveImagePageState extends State<InteractiveImagePage>
     );
 
     _animationController.addListener(_handleAnimation);
-    Future.delayed(Duration(seconds: 3)).then((value) {
+    Future.delayed(const Duration(seconds: 3)).then((value) {
       _animateToNextPreset();
     });
   }
@@ -149,117 +149,117 @@ class _InteractiveImagePageState extends State<InteractiveImagePage>
   }
 
   // Update the _buildControlPanel method to add the animation button
-  Widget _buildControlPanel() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Gradient Controls',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            _buildSliderControl(
-              label: 'Gradient Radius',
-              value: gradientRadius,
-              min: 0,
-              max: 2800,
-              onChanged: (value) => setState(() => gradientRadius = value),
-            ),
-            _buildSliderControl(
-              label: 'Focal Radius',
-              value: focalRadius,
-              min: 0,
-              max: 2200,
-              onChanged: (value) => setState(() => focalRadius = value),
-            ),
-            _buildSliderControl(
-              label: 'Center X Offset',
-              value: centerX,
-              min: -1,
-              max: 1,
-              onChanged: (value) => setState(() => centerX = value),
-            ),
-            _buildSliderControl(
-              label: 'Center Y Offset',
-              value: centerY,
-              min: -1,
-              max: 1,
-              onChanged: (value) => setState(() => centerY = value),
-            ),
-            const SizedBox(height: 20),
-            const Text('Gradient Colors', style: TextStyle(fontSize: 16)),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      final Color? color =
-                          await showColorPicker(context, gradientColors[1]);
-                      if (color != null) {
-                        setState(() => gradientColors[1] = color);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: gradientColors[1],
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('Change Color'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: _animateToNextPreset,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: const Text('Animate to Next Preset'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildControlPanel() {
+  //   return SingleChildScrollView(
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(16.0),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           const Text('Gradient Controls',
+  //               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+  //           const SizedBox(height: 20),
+  //           _buildSliderControl(
+  //             label: 'Gradient Radius',
+  //             value: gradientRadius,
+  //             min: 0,
+  //             max: 2800,
+  //             onChanged: (value) => setState(() => gradientRadius = value),
+  //           ),
+  //           _buildSliderControl(
+  //             label: 'Focal Radius',
+  //             value: focalRadius,
+  //             min: 0,
+  //             max: 2200,
+  //             onChanged: (value) => setState(() => focalRadius = value),
+  //           ),
+  //           _buildSliderControl(
+  //             label: 'Center X Offset',
+  //             value: centerX,
+  //             min: -1,
+  //             max: 1,
+  //             onChanged: (value) => setState(() => centerX = value),
+  //           ),
+  //           _buildSliderControl(
+  //             label: 'Center Y Offset',
+  //             value: centerY,
+  //             min: -1,
+  //             max: 1,
+  //             onChanged: (value) => setState(() => centerY = value),
+  //           ),
+  //           const SizedBox(height: 20),
+  //           const Text('Gradient Colors', style: TextStyle(fontSize: 16)),
+  //           const SizedBox(height: 10),
+  //           Row(
+  //             children: [
+  //               Expanded(
+  //                 child: ElevatedButton(
+  //                   onPressed: () async {
+  //                     final Color? color =
+  //                         await showColorPicker(context, gradientColors[1]);
+  //                     if (color != null) {
+  //                       setState(() => gradientColors[1] = color);
+  //                     }
+  //                   },
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: gradientColors[1],
+  //                     foregroundColor: Colors.white,
+  //                   ),
+  //                   child: const Text('Change Color'),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           const SizedBox(height: 20),
+  //           Row(
+  //             children: [
+  //               Expanded(
+  //                 child: GestureDetector(
+  //                   onTap: _animateToNextPreset,
+  //                   child: const Padding(
+  //                     padding: EdgeInsets.all(8.0),
+  //                     child: Text('Animate to Next Preset'),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildSliderControl({
-    required String label,
-    required double value,
-    required double min,
-    required double max,
-    required ValueChanged<double> onChanged,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label),
-        Row(
-          children: [
-            Expanded(
-              child: Slider(
-                value: value,
-                min: min,
-                max: max,
-                onChanged: onChanged,
-              ),
-            ),
-            SizedBox(
-              width: 50,
-              child: Text(value.toStringAsFixed(1)),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+  // Widget _buildSliderControl({
+  //   required String label,
+  //   required double value,
+  //   required double min,
+  //   required double max,
+  //   required ValueChanged<double> onChanged,
+  // }) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(label),
+  //       Row(
+  //         children: [
+  //           Expanded(
+  //             child: Slider(
+  //               value: value,
+  //               min: min,
+  //               max: max,
+  //               onChanged: onChanged,
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             width: 50,
+  //             child: Text(value.toStringAsFixed(1)),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Future<Color?> showColorPicker(
       BuildContext context, Color initialColor) async {
@@ -309,7 +309,7 @@ class _InteractiveImagePageState extends State<InteractiveImagePage>
         Expanded(
           child: Center(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   // border: Border.all(),
                   ),
               // clipBehavior: Clip.antiAlias,
@@ -427,10 +427,10 @@ class ColorPicker extends StatefulWidget {
   final ValueChanged<Color> onColorChanged;
 
   const ColorPicker({
-    Key? key,
+    super.key,
     required this.selectedColor,
     required this.onColorChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<ColorPicker> createState() => _ColorPickerState();
@@ -527,7 +527,7 @@ class InteractiveImage extends StatelessWidget {
         _handleInteraction(details.globalPosition, context);
       },
       onTapUp: (_) => onInteractionEnd(),
-      child: SocialMediaFeed(),
+      child: const SocialMediaFeed(),
     );
   }
 }
@@ -549,10 +549,10 @@ class SocialFeedPost {
 }
 
 class SocialMediaFeed extends StatefulWidget {
-  const SocialMediaFeed({Key? key}) : super(key: key);
+  const SocialMediaFeed({super.key});
 
   @override
-  _SocialMediaFeedState createState() => _SocialMediaFeedState();
+  State<SocialMediaFeed> createState() => _SocialMediaFeedState();
 }
 
 class _SocialMediaFeedState extends State<SocialMediaFeed> {

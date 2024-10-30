@@ -36,19 +36,19 @@ class HomeScreen extends StatelessWidget {
   final List<DemoItem> demos = [
     DemoItem(
       title: 'Basic Image Filters',
-      content: BasicImageFilters(),
+      content: const BasicImageFilters(),
     ),
     DemoItem(
       title: 'Color Demo',
-      content: ColorDemo(),
+      content: const ColorDemo(),
     ),
     DemoItem(
       title: 'Text Demo',
-      content: TextDemo(),
+      content: const TextDemo(),
     ),
     DemoItem(
       title: 'Button Demo',
-      content: ButtonDemo(),
+      content: const ButtonDemo(),
     ),
   ];
 

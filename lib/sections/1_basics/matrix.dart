@@ -2,9 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
-import 'dart:ui';
-import 'dart:typed_data';
 import 'dart:math' as math;
 
 class MatrixControls extends StatefulWidget {
