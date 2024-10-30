@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:image_filters/live_coding/onboarding_with_blur.dart';
 import 'package:image_filters/sections/1_basics/basic_filters.dart';
+import 'package:image_filters/sections/2_combine/compose_filters.dart';
+import 'package:image_filters/sections/3_blur/blur.dart';
+import 'package:image_filters/sections/4_soft_edge_blur/soft_edge_blur_demos.dart';
+import 'package:image_filters/sections/5_fragment_shaders/custom_image_filter_with_shaders.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +23,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Model for demo items
 class DemoItem {
   final String title;
   final Widget content;
@@ -29,26 +33,33 @@ class DemoItem {
   });
 }
 
-// Home screen with grid view
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   final List<DemoItem> demos = [
     DemoItem(
-      title: 'Basic Image Filters',
+      title: '1. Basic Image Filters',
       content: const BasicImageFilters(),
     ),
     DemoItem(
-      title: 'Color Demo',
-      content: const ColorDemo(),
+      title: '2. Compose Image Filters',
+      content: const ComposeImageFilters(),
     ),
     DemoItem(
-      title: 'Text Demo',
-      content: const TextDemo(),
+      title: '3. Blur',
+      content: const BlurDeepDive(),
     ),
     DemoItem(
-      title: 'Button Demo',
-      content: const ButtonDemo(),
+      title: '4. Soft Edge Blur',
+      content: const SoftEdgeBlurDemos(),
+    ),
+    DemoItem(
+      title: '5. Custom Image Filters',
+      content: const CustomImageFilterWithShaders(),
+    ),
+    DemoItem(
+      title: '6. Onboarding with blur',
+      content: const OnboardingWithBlur(),
     ),
   ];
 
@@ -58,23 +69,27 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Flutter Demos'),
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+      body: Center(
+        child: AspectRatio(
+          aspectRatio: 1.5,
+          child: GridView.builder(
+            padding: const EdgeInsets.all(16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+            ),
+            itemCount: demos.length,
+            itemBuilder: (context, index) {
+              return DemoCard(demo: demos[index]);
+            },
+          ),
         ),
-        itemCount: demos.length,
-        itemBuilder: (context, index) {
-          return DemoCard(demo: demos[index]);
-        },
       ),
     );
   }
 }
 
-// Card widget for each demo item
 class DemoCard extends StatelessWidget {
   final DemoItem demo;
 
@@ -109,7 +124,6 @@ class DemoCard extends StatelessWidget {
   }
 }
 
-// Screen for individual demos
 class DemoScreen extends StatelessWidget {
   final DemoItem demo;
 
@@ -126,141 +140,6 @@ class DemoScreen extends StatelessWidget {
         ),
       ),
       body: demo.content,
-    );
-  }
-}
-
-// Sample demo content widgets
-class CounterDemo extends StatefulWidget {
-  const CounterDemo({super.key});
-
-  @override
-  State<CounterDemo> createState() => _CounterDemoState();
-}
-
-class _CounterDemoState extends State<CounterDemo> {
-  int _counter = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Counter Value: $_counter',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () => setState(() => _counter++),
-            child: const Text('Increment'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ColorDemo extends StatelessWidget {
-  const ColorDemo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ColorBox(color: Colors.red),
-              ColorBox(color: Colors.green),
-              ColorBox(color: Colors.blue),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ColorBox extends StatelessWidget {
-  final Color color;
-
-  const ColorBox({super.key, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 80,
-      height: 80,
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
-      ),
-    );
-  }
-}
-
-class TextDemo extends StatelessWidget {
-  const TextDemo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Headline Large',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          Text(
-            'Headline Medium',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          Text(
-            'Body Large',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          Text(
-            'Body Medium',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ButtonDemo extends StatelessWidget {
-  const ButtonDemo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Elevated Button'),
-          ),
-          const SizedBox(height: 16),
-          OutlinedButton(
-            onPressed: () {},
-            child: const Text('Outlined Button'),
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {},
-            child: const Text('Text Button'),
-          ),
-        ],
-      ),
     );
   }
 }
