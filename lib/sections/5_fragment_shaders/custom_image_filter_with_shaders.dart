@@ -33,8 +33,8 @@ class _CustomImageFilterWithShadersState
       content: const RiveoPageCurlDemo(),
     ),
     DemoItem(
-      title: 'TODO: Noise',
-      content: const RiveoPageCurlDemo(),
+      title: 'TODO: ',
+      content: Container(),
     ),
   ];
 
