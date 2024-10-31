@@ -1,5 +1,4 @@
 import 'dart:ui' as ui;
-import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
@@ -28,67 +27,102 @@ class InteractiveImagePage extends StatefulWidget {
   State<InteractiveImagePage> createState() => _InteractiveImagePageState();
 }
 
+// First, let's create a class to hold our animation values
+class GradientAnimationState {
+  final double gradientRadius;
+  final double focalRadius;
+  final double centerX;
+  final double centerY;
+
+  const GradientAnimationState({
+    required this.gradientRadius,
+    required this.focalRadius,
+    required this.centerX,
+    required this.centerY,
+  });
+
+  // Lerp method to handle interpolation
+  static GradientAnimationState lerp(
+    GradientAnimationState begin,
+    GradientAnimationState end,
+    double t,
+  ) {
+    return GradientAnimationState(
+      gradientRadius:
+          ui.lerpDouble(begin.gradientRadius, end.gradientRadius, t)!,
+      focalRadius: ui.lerpDouble(begin.focalRadius, end.focalRadius, t)!,
+      centerX: ui.lerpDouble(begin.centerX, end.centerX, t)!,
+      centerY: ui.lerpDouble(begin.centerY, end.centerY, t)!,
+    );
+  }
+}
+
 class _InteractiveImagePageState extends State<InteractiveImagePage>
     with SingleTickerProviderStateMixin {
-  // Animation controller
   late AnimationController _animationController;
   int? _currentAnimationIndex;
 
-  // List of preset animations
-  final List<Map<String, dynamic>> _animationPresets = [
-    {
-      'gradientRadius': 1700.0,
-      'focalRadius': 20.0,
-      'centerX': 0.4,
-      'centerY': 0.0,
-    },
-    {
-      'gradientRadius': 1500.0,
-      'focalRadius': 20.0,
-      'centerX': 0.5,
-      'centerY': 0.0,
-    },
-    {
-      'gradientRadius': 254.0,
-      'focalRadius': 108.0,
-      'centerX': 0.1,
-      'centerY': 0.5,
-    },
-    {
-      'gradientRadius': 247.0,
-      'focalRadius': 145.0,
-      'centerX': 1.0,
-      'centerY': 0.0,
-    },
-    {
-      'gradientRadius': 800.0,
-      'focalRadius': 145.0,
-      'centerX': 1.0,
-      'centerY': 1.0,
-    },
-    {
-      'gradientRadius': 2200.0,
-      'focalRadius': 2000.0,
-      'centerX': 1.0,
-      'centerY': 1.0,
-    },
+  // List of preset animations using the new class
+  final List<GradientAnimationState> _animationPresets = [
+    // top center
+    const GradientAnimationState(
+      gradientRadius: 400.0,
+      focalRadius: 290.0,
+      centerX: 0.5,
+      centerY: 0.0,
+    ),
+    const GradientAnimationState(
+      gradientRadius: 200.0,
+      focalRadius: 190.0,
+      centerX: 0.5,
+      centerY: 0.0,
+    ),
+    const GradientAnimationState(
+      gradientRadius: 810.0,
+      focalRadius: 190.0,
+      centerX: 0.5,
+      centerY: 0.0,
+    ),
+    const GradientAnimationState(
+      gradientRadius: 354.0,
+      focalRadius: 108.0,
+      centerX: 0.1,
+      centerY: 0.5,
+    ),
+    // refresh button
+    const GradientAnimationState(
+      gradientRadius: 347.0,
+      focalRadius: 290.0,
+      centerX: 1.0,
+      centerY: 0.0,
+    ),
+    // add button
+    const GradientAnimationState(
+      gradientRadius: 800.0,
+      focalRadius: 345.0,
+      centerX: 1.0,
+      centerY: 1.0,
+    ),
+    // empty
+    const GradientAnimationState(
+      gradientRadius: 4000.0,
+      focalRadius: 2900.0,
+      centerX: 1.0,
+      centerY: 1.0,
+    ),
   ];
 
-  //Offset? interactionPosition;
   bool isInteracting = false;
-  // Gradient control parameters
-  double gradientRadius = 1700.0;
-  double focalRadius = 0.0;
-  double centerX = .5;
-  double centerY = 0.0;
-  List<Color> gradientColors = [Colors.transparent, Colors.blue];
+  late GradientAnimationState currentState;
+  List<Color> gradientColors = [Colors.transparent, Colors.black];
   List<double> gradientStops = [0.0, 1.0];
 
   @override
   void initState() {
     super.initState();
+    currentState = _animationPresets[0];
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 2200),
       vsync: this,
     );
 
@@ -110,32 +144,16 @@ class _InteractiveImagePageState extends State<InteractiveImagePage>
       final nextPreset = _animationPresets[
           (_currentAnimationIndex! + 1) % _animationPresets.length];
 
-      final progress = _animationController.value;
+      final springValue = Curves.easeInOut.transform(
+        _animationController.value,
+      );
 
       setState(() {
-        gradientRadius = ui.lerpDouble(
-          currentPreset['gradientRadius'] as double,
-          nextPreset['gradientRadius'] as double,
-          progress,
-        )!;
-
-        focalRadius = ui.lerpDouble(
-          currentPreset['focalRadius'] as double,
-          nextPreset['focalRadius'] as double,
-          progress,
-        )!;
-
-        centerX = ui.lerpDouble(
-          currentPreset['centerX'] as double,
-          nextPreset['centerX'] as double,
-          progress,
-        )!;
-
-        centerY = ui.lerpDouble(
-          currentPreset['centerY'] as double,
-          nextPreset['centerY'] as double,
-          progress,
-        )!;
+        currentState = GradientAnimationState.lerp(
+          currentPreset,
+          nextPreset,
+          springValue,
+        );
       });
     }
   }
@@ -149,171 +167,14 @@ class _InteractiveImagePageState extends State<InteractiveImagePage>
     _animationController.forward(from: 0.0);
   }
 
-  // Update the _buildControlPanel method to add the animation button
-  // Widget _buildControlPanel() {
-  //   return SingleChildScrollView(
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(16.0),
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           const Text('Gradient Controls',
-  //               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-  //           const SizedBox(height: 20),
-  //           _buildSliderControl(
-  //             label: 'Gradient Radius',
-  //             value: gradientRadius,
-  //             min: 0,
-  //             max: 2800,
-  //             onChanged: (value) => setState(() => gradientRadius = value),
-  //           ),
-  //           _buildSliderControl(
-  //             label: 'Focal Radius',
-  //             value: focalRadius,
-  //             min: 0,
-  //             max: 2200,
-  //             onChanged: (value) => setState(() => focalRadius = value),
-  //           ),
-  //           _buildSliderControl(
-  //             label: 'Center X Offset',
-  //             value: centerX,
-  //             min: -1,
-  //             max: 1,
-  //             onChanged: (value) => setState(() => centerX = value),
-  //           ),
-  //           _buildSliderControl(
-  //             label: 'Center Y Offset',
-  //             value: centerY,
-  //             min: -1,
-  //             max: 1,
-  //             onChanged: (value) => setState(() => centerY = value),
-  //           ),
-  //           const SizedBox(height: 20),
-  //           const Text('Gradient Colors', style: TextStyle(fontSize: 16)),
-  //           const SizedBox(height: 10),
-  //           Row(
-  //             children: [
-  //               Expanded(
-  //                 child: ElevatedButton(
-  //                   onPressed: () async {
-  //                     final Color? color =
-  //                         await showColorPicker(context, gradientColors[1]);
-  //                     if (color != null) {
-  //                       setState(() => gradientColors[1] = color);
-  //                     }
-  //                   },
-  //                   style: ElevatedButton.styleFrom(
-  //                     backgroundColor: gradientColors[1],
-  //                     foregroundColor: Colors.white,
-  //                   ),
-  //                   child: const Text('Change Color'),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           const SizedBox(height: 20),
-  //           Row(
-  //             children: [
-  //               Expanded(
-  //                 child: GestureDetector(
-  //                   onTap: _animateToNextPreset,
-  //                   child: const Padding(
-  //                     padding: EdgeInsets.all(8.0),
-  //                     child: Text('Animate to Next Preset'),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget _buildSliderControl({
-  //   required String label,
-  //   required double value,
-  //   required double min,
-  //   required double max,
-  //   required ValueChanged<double> onChanged,
-  // }) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(label),
-  //       Row(
-  //         children: [
-  //           Expanded(
-  //             child: Slider(
-  //               value: value,
-  //               min: min,
-  //               max: max,
-  //               onChanged: onChanged,
-  //             ),
-  //           ),
-  //           SizedBox(
-  //             width: 50,
-  //             child: Text(value.toStringAsFixed(1)),
-  //           ),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  Future<Color?> showColorPicker(
-      BuildContext context, Color initialColor) async {
-    return showDialog<Color>(
-      context: context,
-      builder: (BuildContext context) {
-        Color selectedColor = initialColor;
-        return AlertDialog(
-          title: const Text('Pick a color'),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              selectedColor: selectedColor,
-              onColorChanged: (Color color) {
-                selectedColor = color;
-              },
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () => Navigator.of(context).pop(selectedColor),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Control Panel
-        // SizedBox(
-        //   width: 300,
-        //   child: _buildControlPanel(),
-        // ),
-
-        // Vertical Divider
-        // const VerticalDivider(width: 1),
-
-        // Image Display
         Expanded(
           child: Center(
             child: Container(
-              decoration: const BoxDecoration(
-                  // border: Border.all(),
-                  ),
-              // clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(),
               child: AnimatedSampler(
                 (image, size, canvas) {
                   final devicePixelRatio =
@@ -327,58 +188,29 @@ class _InteractiveImagePageState extends State<InteractiveImagePage>
                   final rect = Rect.fromLTWH(0, 0, width, height);
                   canvas.saveLayer(rect, Paint());
 
-                  // Create a paint with blur and grayscale effects
                   final blurredPaint = Paint()
                     ..imageFilter = ui.ImageFilter.blur(
                       sigmaX: 30,
                       sigmaY: 30,
                       tileMode: TileMode.mirror,
                     );
-//                       ..colorFilter = const ColorFilter.matrix([
-//                         0.2126,
-//                         0.7152,
-//                         0.0722,
-//                         0,
-//                         0,
-//                         0.2126,
-//                         0.7152,
-//                         0.0722,
-//                         0,
-//                         0,
-//                         0.2126,
-//                         0.7152,
-//                         0.0722,
-//                         0,
-//                         0,
-//                         0,
-//                         0,
-//                         0,
-//                         1,
-//                         0,
-//                       ]);
 
                   canvas.drawImage(image, Offset.zero, blurredPaint);
 
-//                     if (interactionPosition != null) {
-//                       final basePosition = Offset(
-//                         interactionPosition!.dx * width,
-//                         interactionPosition!.dy * height,
-//                       );
-
                   final adjustedPosition = Offset(
-                    (centerX * width),
-                    (centerY * height),
+                    (currentState.centerX * width),
+                    (currentState.centerY * height),
                   );
 
                   final gradient = ui.Gradient.radial(
                     adjustedPosition,
-                    gradientRadius,
+                    currentState.gradientRadius,
                     gradientColors,
                     gradientStops,
                     TileMode.clamp,
                     Matrix4.identity().storage,
                     adjustedPosition,
-                    focalRadius,
+                    currentState.focalRadius,
                   );
 
                   final gradientPaint = Paint()
@@ -387,24 +219,14 @@ class _InteractiveImagePageState extends State<InteractiveImagePage>
 
                   canvas.drawRect(rect, gradientPaint);
                   canvas.restore();
-//                     }
                 },
                 child: InteractiveImage(
-                  imageUrl: 'https://i.imgur.com/PVxynOu.png',
                   onInteractionUpdate: (double x, double y) {
-//                       _updatePosition(Offset(x, y));
-
                     if (!isInteracting) {
                       setState(() {
                         isInteracting = true;
                       });
                       _animateToNextPreset();
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(
-                      //     content: Text('Interaction started at: ($x, $y)'),
-                      //     duration: const Duration(seconds: 2),
-                      //   ),
-                      // );
                     }
                   },
                   onInteractionEnd: () {
@@ -488,13 +310,11 @@ class _ColorPickerState extends State<ColorPicker> {
 // Rest of the classes (InteractiveImage, AnimatedSampler, etc.) remain the same...
 
 class InteractiveImage extends StatelessWidget {
-  final String imageUrl;
   final Function(double x, double y) onInteractionUpdate;
   final Function() onInteractionEnd;
 
   const InteractiveImage({
     super.key,
-    required this.imageUrl,
     required this.onInteractionUpdate,
     required this.onInteractionEnd,
   });
@@ -560,18 +380,70 @@ class _SocialMediaFeedState extends State<SocialMediaFeed> {
   // Sample data - in a real app, this would come from a backend
   final List<SocialFeedPost> _posts = [
     SocialFeedPost(
-      username: "john_doe",
-      imageUrl: "https://picsum.photos/1200/1200",
-      caption: "Beautiful sunset!",
-      likes: 42,
-      comments: ["Great shot!", "Amazing view!"],
+      username: "nature_explorer",
+      imageUrl: "https://i.imgur.com/ef1tEAM.jpeg",
+      caption: "Discovering hidden treasures in nature 🌿",
+      likes: 342,
+      comments: [
+        "This place looks magical!",
+        "Where is this located?",
+        "The colors are incredible!"
+      ],
     ),
     SocialFeedPost(
-      username: "jane_smith",
-      imageUrl: "https://picsum.photos/1200/1201",
-      caption: "Weekend vibes ✨",
-      likes: 127,
-      comments: ["Having fun!", "Wish I was there!"],
+      username: "urban_photographer",
+      imageUrl: "https://i.imgur.com/BMD01oG.png",
+      caption: "City lights and urban nights 🌃",
+      likes: 567,
+      comments: [
+        "Perfect composition!",
+        "Love the urban vibes",
+        "This is stunning!"
+      ],
+    ),
+    SocialFeedPost(
+      username: "adventure_seeker",
+      imageUrl: "https://i.imgur.com/H7dxIit.png",
+      caption: "Living life on the edge 🏔️",
+      likes: 891,
+      comments: [
+        "This is breathtaking!",
+        "Stay safe out there!",
+        "Need to visit this place"
+      ],
+    ),
+    SocialFeedPost(
+      username: "creative_soul",
+      imageUrl: "https://i.imgur.com/u0Da4BS.png",
+      caption: "Art is everywhere you look 🎨",
+      likes: 423,
+      comments: [
+        "Such an artistic shot",
+        "The perspective is everything",
+        "Keep creating!"
+      ],
+    ),
+    SocialFeedPost(
+      username: "wanderlust_diary",
+      imageUrl: "https://i.imgur.com/3QougGr.png",
+      caption: "Lost in the moment ✨",
+      likes: 756,
+      comments: [
+        "This is pure magic",
+        "Your adventures inspire me",
+        "Beautiful capture!"
+      ],
+    ),
+    SocialFeedPost(
+      username: "lifestyle_chronicles",
+      imageUrl: "https://i.imgur.com/ea9Ug6E.png",
+      caption: "Making memories that last forever 💫",
+      likes: 634,
+      comments: [
+        "Living your best life!",
+        "This is goals",
+        "Can't wait to see more"
+      ],
     ),
   ];
 

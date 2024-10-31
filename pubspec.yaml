@@ -40,6 +40,10 @@ dependencies:
   flutter_animate:
   flutter_svg:
   cached_network_image:
+  linked_scroll_controller: 0.2.0
+  soft_edge_blur:
+  flutter_map:
+  latlong2:
 dev_dependencies:
   flutter_test:
     sdk: flutter
