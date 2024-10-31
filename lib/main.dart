@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_filters/live_coding/onboarding_with_blur.dart';
+import 'package:image_filters/live_coding/selective_focus.dart';
 import 'package:image_filters/sections/1_basics/basic_filters.dart';
 import 'package:image_filters/sections/2_combine/compose_filters.dart';
 import 'package:image_filters/sections/3_blur/blur.dart';
@@ -59,7 +60,8 @@ class HomeScreen extends StatelessWidget {
     ),
     DemoItem(
       title: '6. Onboarding with blur',
-      content: const OnboardingWithBlur(),
+      // content: const OnboardingWithBlur(),
+      content: const SelectiveFocus(),
     ),
   ];
 
@@ -73,6 +75,7 @@ class HomeScreen extends StatelessWidget {
         child: AspectRatio(
           aspectRatio: 1.5,
           child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
