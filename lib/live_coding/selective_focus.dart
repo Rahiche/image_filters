@@ -60,7 +60,8 @@ class _InteractiveImagePageState extends State<InteractiveImagePage> {
     setState(() {
       _position = Offset(
         (localPos.dx / box.size.width).clamp(0.0, 1.0),
-        (localPos.dy / box.size.height).clamp(0.0, 1.0),
+        ((localPos.dy - InteractiveImagePainter.radius) / box.size.height)
+            .clamp(0.0, 1.0),
       );
     });
   }
@@ -97,7 +98,7 @@ class _InteractiveImagePageState extends State<InteractiveImagePage> {
 class InteractiveImagePainter extends CustomPainter {
   final ui.Image image;
   final Offset? position;
-  static const radius = 350.1;
+  static const radius = 50.1;
 
   const InteractiveImagePainter({required this.image, required this.position});
 
@@ -116,26 +117,10 @@ class InteractiveImagePainter extends CustomPainter {
       Paint()
         ..imageFilter = ui.ImageFilter.blur(sigmaX: 20, sigmaY: 20)
         ..colorFilter = const ColorFilter.matrix([
-          0.2126,
-          0.7152,
-          0.0722,
-          0,
-          0,
-          0.2126,
-          0.7152,
-          0.0722,
-          0,
-          0,
-          0.2126,
-          0.7152,
-          0.0722,
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
+          0.2126, 0.7152, 0.0722, 0, 0, //
+          0.2126, 0.7152, 0.0722, 0, 0, //
+          0.2126, 0.7152, 0.0722, 0, 0, //
+          0, 0, 0, 1, 0, //
         ]),
     );
 
