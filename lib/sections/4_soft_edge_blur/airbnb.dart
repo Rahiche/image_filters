@@ -163,7 +163,7 @@ class AirbnbCard extends StatelessWidget {
           type: EdgeType.bottomEdge,
           size: 110,
           sigma: 30,
-          tintColor: const Color(0xFFE1B369).withOpacity(0.6),
+          tintColor: const Color(0xFFE1B369).withValues(alpha: 0.6),
           controlPoints: [
             ControlPoint(
               position: 0.7,

@@ -158,6 +158,6 @@ class InteractiveImagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(InteractiveImagePainter old) =>
-      image != old.image || position != old.position;
+  bool shouldRepaint(InteractiveImagePainter oldDelegate) =>
+      image != oldDelegate.image || position != oldDelegate.position;
 }

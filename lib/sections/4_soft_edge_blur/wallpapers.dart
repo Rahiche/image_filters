@@ -137,11 +137,9 @@ class Wallpapers extends StatelessWidget {
 }
 
 class ArtItem extends StatelessWidget {
+  const ArtItem({super.key, required this.title, required this.imageUrl});
   final String title;
   final String imageUrl;
-
-  const ArtItem({Key? key, required this.title, required this.imageUrl})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

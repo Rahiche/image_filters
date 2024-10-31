@@ -44,6 +44,7 @@ dependencies:
   soft_edge_blur:
   flutter_map:
   latlong2:
+  image:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -71,6 +72,7 @@ flutter:
     - shaders/name_drop.frag
     - shaders/page_curl.frag
     - shaders/rgb_glitch.frag
+    - shaders/down_sample.frag
   assets:
     - assets/images/
   #   - images/a_dot_ham.jpeg

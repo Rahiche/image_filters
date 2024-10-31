@@ -78,7 +78,9 @@ class _MusicPlayerHomeState extends State<MusicPlayerHome> {
           type: EdgeType.bottomEdge,
           size: 200,
           sigma: 30,
-          tintColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
+          tintColor: Theme.of(context).scaffoldBackgroundColor.withValues(
+                alpha: 0.8,
+              ),
           controlPoints: [
             ControlPoint(
               position: 0.4,
