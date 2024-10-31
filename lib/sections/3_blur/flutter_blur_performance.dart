@@ -597,40 +597,6 @@ class _ColorfulGridViewState extends State<ColorfulGridView> {
                   );
                 },
               ),
-              // White circles
-              ...List.generate(_circleCount, (index) {
-                return Positioned(
-                  left: _circlePositions[index] * (_itemCount * 50 * 2) - 5,
-                  bottom: 0,
-                  top: 0,
-                  child: Animate(
-                    effects: [
-                      ScaleEffect(
-                        begin: const Offset(1, 1),
-                        end: const Offset(1.2, 1.2),
-                        duration: 500.milliseconds,
-                        curve: Curves.easeInOut,
-                      ),
-                      FadeEffect(
-                        begin: 0.5,
-                        end: 1,
-                        duration: 500.milliseconds,
-                        curve: Curves.easeInOut,
-                      ),
-                    ],
-                    onComplete: (controller) =>
-                        controller.repeat(reverse: true),
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                );
-              })
             ],
           ),
         ),
