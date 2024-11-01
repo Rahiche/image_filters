@@ -52,10 +52,12 @@ class _DeviceAnimationDemoState extends State<DeviceAnimationDemo>
           if (_animation.value == 1.0 && !isNameDropAnimating) {
             isNameDropAnimating = true;
             Future.delayed(nameDropDuration, () {
-              setState(() {
-                isNameDropAnimating = false;
-                _controller.reverse();
-              });
+              if (mounted) {
+                setState(() {
+                  isNameDropAnimating = false;
+                  _controller.reverse();
+                });
+              }
             });
           }
         });
